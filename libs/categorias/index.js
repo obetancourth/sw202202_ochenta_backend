@@ -34,3 +34,29 @@ module.exports.getCategoryById = async ({codigo}) => {
   );
   return selectedCategory;
 }
+
+module.exports.updateCategory= async({codigo, categoria, estado}) => {
+  let updatedCategory = null;
+  const newCategories = categoriasMemStore.map((objCategoria)=>{
+    if (objCategoria.codigo === codigo) {
+      updatedCategory = { ...objCategoria, categoria, estado };
+      return updatedCategory;
+    }
+    return objCategoria;
+  });
+  categoriasMemStore = newCategories;
+  return updatedCategory;
+}
+
+module.exports.deleteCategory = async ({codigo})=> {
+  let deletedCategory = null;
+  const newCategories = categoriasMemStore.filter((objCategoria)=>{
+    if(objCategoria.codigo === codigo) {
+      deletedCategory = objCategoria;
+      return false;
+    }
+    return true;
+  });
+  categoriasMemStore = newCategories;
+  return deletedCategory;
+}

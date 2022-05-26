@@ -1,5 +1,5 @@
 const express = require('express');
-const { getCategoryVersion, getCategories, addCategory } = require('../../../../libs/categorias');
+const { getCategoryVersion, getCategories, addCategory, updateCategory, deleteCategory } = require('../../../../libs/categorias');
 const router = express.Router();
 
 router.get('/', async (req, res) => {
@@ -46,5 +46,56 @@ router.post('/new', async (req, res) => {
   }
 });
 
+router.put('/update/:codigo', async (req, res)=>{
+  try {
+    const {codigo} = req.params;
+    if(!(/^\d+$/.test(codigo))) {
+      return res.status(400).json({error:'El codigo debe ser un dígito válido.'});
+    }
+    const {categoria, estado} = req.body;
+    if (/^\s*$/.test(categoria)) {
+      return res.status(400).json({
+        error: 'Se espera valor de categoría'
+      });
+    }
+    if (!(/^(ACT)|(INA)$/.test(estado))) {
+      return res.status(400).json({
+        error: 'Se espera valor de estado en ACT o INA'
+      });
+    }
+
+    const updateResult = await updateCategory({codigo:parseInt(codigo), categoria, estado});
+
+    if (!updateResult) {
+      return res.status(404).json({error:'Categoria no encontrada.'});
+    }
+    return res.status(200).json({updatedCategory:updateResult});
+
+  } catch(ex) {
+    console.error(ex);
+    res.status(500).json({error: 'Error al procesar solicitud.'});
+  }
+});
+
+
+router.delete('/delete/:codigo', async (req, res) => {
+  try {
+    const { codigo } = req.params;
+    if (!(/^\d+$/.test(codigo))) {
+      return res.status(400).json({ error: 'El codigo debe ser un dígito válido.' });
+    }
+
+    const deletedCategory = await deleteCategory({ codigo: parseInt(codigo)});
+
+    if (!deletedCategory) {
+      return res.status(404).json({ error: 'Categoria no encontrada.' });
+    }
+    return res.status(200).json({ deletedCategory});
+
+  } catch (ex) {
+    console.error(ex);
+    res.status(500).json({ error: 'Error al procesar solicitud.' });
+  }
+});
 
 module.exports = router;
