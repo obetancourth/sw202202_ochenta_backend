@@ -11,27 +11,35 @@ module.exports = class CategoryDao extends DaoObject{
       this.conn.run(createStatement);
     }
   }
-  async insertOne({category, status}) {
-    this.conn.run(
-      'INSERT INTO categories (category, status) values (?, ?);',
-      [category, status],
-       (err) => {
-         if(err){
-           throw err;
-         }
-         return {id: this.lastID, category, status}
-       }
+
+  getAll(){
+    return this.all(
+      'SELECT * from categories;', []
     );
   }
-  async getAll(){
-    this.conn.all(
-      'SELECT * from categories;',
-      (err, rows)=>{
-        if(err){
-          throw err;
-        }
-        return rows;
-      }
-    )
+
+  getById( {codigo} ){
+    const sqlstr= 'SELECT * from categories where id=?;';
+    const sqlParamArr = [codigo];
+    return this.get(sqlstr, sqlParamArr);
   }
+
+  insertOne({categoria, estado}) {
+    const sqlstr = 'INSERT INTO categories (category, status) values (?, ?);';
+    const sqlParamArr = [categoria, estado];
+    return this.run(sqlstr, sqlParamArr);
+  }
+
+  updateOne({codigo, categoria, estado}){
+    const sqlstr= 'UPDATE categories set category = ?, status = ? where id = ?;';
+    const sqlParamArr = [categoria, estado, codigo];
+    return this.run(sqlstr, sqlParamArr);
+  }
+
+  deleteOne({ codigo }) {
+    const sqlstr = 'DELETE FROM categories where id = ?;';
+    const sqlParamArr = [codigo];
+    return this.run(sqlstr, sqlParamArr);
+  }
+
 }

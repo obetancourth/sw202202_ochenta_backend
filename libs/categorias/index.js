@@ -26,12 +26,15 @@ module.exports = class Category {
     categoria = 'NuevaCategoria',
     estado = 'ACT'
   }) {
-    return this.categoryDao.insertOne(
+    const result =  await this.categoryDao.insertOne(
       {
         categoria,
         estado
       }
     );
+    return {
+      categoria, estado, id: result.lastID
+    };
   };
 
   async getCategories () {
@@ -39,36 +42,26 @@ module.exports = class Category {
   }
 
   async getCategoryById ({ codigo }) {
-    const selectedCategory = this.categoriasMemStore.find(
-      obj => obj.codigo === codigo
-    );
-    return selectedCategory;
+    return this.categoryDao.getById({codigo});
   }
 
   async updateCategory ({ codigo, categoria, estado }) {
-    let updatedCategory = null;
-    const newCategories = this.categoriasMemStore.map((objCategoria) => {
-      if (objCategoria.codigo === codigo) {
-        updatedCategory = { ...objCategoria, categoria, estado };
-        return updatedCategory;
-      }
-      return objCategoria;
-    });
-    this.categoriasMemStore = newCategories;
-    return updatedCategory;
+    const result = await this.categoryDao.updateOne({ codigo, categoria, estado });
+    return {
+      id: codigo,
+      category: categoria,
+      status: estado,
+      modified: result.changes
+    }
   }
 
   async deleteCategory({ codigo }) {
-    let deletedCategory = null;
-    const newCategories = this.categoriasMemStore.filter((objCategoria) => {
-      if (objCategoria.codigo === codigo) {
-        deletedCategory = objCategoria;
-        return false;
-      }
-      return true;
-    });
-    this.categoriasMemStore = newCategories;
-    return deletedCategory;
+    const cateToDelete = await this.categoryDao.getById({codigo});
+    const result = await this.categoryDao.deleteOne({ codigo });
+    return {
+      ...cateToDelete,
+      deleted: result.changes
+    };
   }
 }
 /*

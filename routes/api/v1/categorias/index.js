@@ -29,6 +29,22 @@ router.get('/all', async (req, res) => {
   }
 });
 
+router.get('/byid/:codigo', async (req, res) => {
+  try {
+    const {codigo} = req.params;
+    if (!(/^\d+$/.test(codigo))){
+      return res.status(400).json({
+        error: 'Se espera un codigo numérico'
+      });
+    }
+    const registro = await cat.getCategoryById({codigo: parseInt(codigo)});
+    return res.status(200).json(registro);
+  } catch (ex) {
+    console.error(ex);
+    return res.status(501).json({ error: 'Error al procesar solicitud.' });
+  }
+} );
+
 router.post('/new', async (req, res) => {
   try {
     const {categoria = '', estado=''} = req.body;
