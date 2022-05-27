@@ -3,7 +3,9 @@
 /**
  * Module dependencies.
  */
-
+var dotenv = require('dotenv');
+dotenv.config();
+console.log('ENV: ' + process.env.SQLITE_DB);
 var app = require('../app');
 var debug = require('debug')('ochentabe:server');
 var http = require('http');
