@@ -12,7 +12,7 @@ module.exports = class Category {
   }
   async init(){
     await this.categoryDao.init();
-    this.categoryDao.setup();
+    await this.categoryDao.setup();
   }
   async getCategoryVersion () {
     return {

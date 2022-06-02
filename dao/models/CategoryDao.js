@@ -5,10 +5,10 @@ module.exports = class CategoryDao extends DaoObject{
     console.log('CategoryDao db: ', db);
     super(db);
   }
-  setup(){
+  async setup(){
     if (process.env.SQLITE_SETUP) {
       const createStatement = 'CREATE TABLE IF NOT EXISTS categories (id INTEGER PRIMARY KEY AUTOINCREMENT, category TEXT, status TEXT);';
-      this.conn.run(createStatement);
+      await this.run(createStatement);
     }
   }
 

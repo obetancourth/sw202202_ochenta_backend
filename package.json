@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test": "jest"
+    "test": "jest --runInBand",
+    "test:watch": "jest --watch --runInBand"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
