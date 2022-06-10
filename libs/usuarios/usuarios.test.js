@@ -1,6 +1,6 @@
 const Usuario = require('./index.js');
-const Conexion = require('../../dao/Connection');
-const UsuariosDao = require('../../dao/models/UsuarioDao');
+const Conexion = require('../../dao/sqlite/Connection');
+const UsuariosDao = require('../../dao/sqlite/models/UsuarioDao');
 const fs = require('fs');
 
 

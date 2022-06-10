@@ -1,4 +1,4 @@
-const DaoObject = require('../../dao/DaoObject');
+const DaoObject = require('../../dao/sqlite/DaoObject');
 module.exports = class Category {
   categoryDao = null;
   categoriasMemStore = [];

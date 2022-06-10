@@ -1,6 +1,6 @@
 const Categoria = require('./index.js');
-const Conexion = require('../../dao/Connection');
-const CategoriaDao = require('../../dao/models/CategoryDao');
+const Conexion = require('../../dao/sqlite/Connection');
+const CategoriaDao = require('../../dao/sqlite/models/CategoryDao');
 const fs = require('fs');
 
 describe("Testing Categoria Crud", () => {
