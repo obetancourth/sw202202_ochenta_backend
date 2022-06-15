@@ -44,4 +44,25 @@ module.exports = class DaoObject {
     else
       return this.collection.find(query, options).toArray();
   }
+
+  findById(_id){
+    const queryId = {_id: new ObjectId(_id)}
+    return this.collection.findOne(queryId);
+  }
+
+  insertOne(docToInsert={}){
+    if(docToInsert === {} ) {
+      throw Error('A document to be inserted is needed.');
+    }
+    return this.collection.insertOne(docToInsert);
+  }
+
+  updateOne(_id, queryCommand){
+    return this.collection.updateOne({_id:new ObjectId(_id)}, queryCommand);
+  }
+  removeOne(_id){
+    return this.collection.deleteOne({_id: new ObjectId(_id)});
+  }
+  aggregate(){}
+
 }

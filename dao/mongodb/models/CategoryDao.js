@@ -14,4 +14,23 @@ module.exports = class CategoryDao extends DaoObject {
   getAll() {
     return this.find();
   }
+  getById({codigo}) {
+    return this.findById(codigo);
+  }
+  insertOne({ categoria, estado }) {
+    return super.insertOne({categoria, estado, created: new Date().toISOString()});
+  }
+  updateOne({ codigo, categoria, estado }) {
+    const updateCommand = {
+      '$set': {
+        categoria,
+        estado,
+        updated: new Date().toISOString()
+      }
+    };
+    return super.updateOne(codigo, updateCommand);
+  }
+  deleteOne({ codigo }) {
+    return super.removeOne(codigo);
+  }
 }
