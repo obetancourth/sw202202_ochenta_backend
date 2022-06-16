@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Category = require('../../../../libs/categorias');
-const CategoryDao = require('../../../../dao/models/CategoryDao');
+const CategoryDao = require('../../../../dao/mongodb/models/CategoryDao');
 const catDao = new CategoryDao();
 const cat = new Category(catDao);
 cat.init();
@@ -32,12 +32,12 @@ router.get('/all', async (req, res) => {
 router.get('/byid/:codigo', async (req, res) => {
   try {
     const {codigo} = req.params;
-    if (!(/^\d+$/.test(codigo))){
+    if (!(/^(\d+)|([\da-f]{24})$/.test(codigo))){
       return res.status(400).json({
         error: 'Se espera un codigo numérico'
       });
     }
-    const registro = await cat.getCategoryById({codigo: parseInt(codigo)});
+    const registro = await cat.getCategoryById({codigo});
     return res.status(200).json(registro);
   } catch (ex) {
     console.error(ex);
@@ -69,7 +69,7 @@ router.post('/new', async (req, res) => {
 router.put('/update/:codigo', async (req, res)=>{
   try {
     const {codigo} = req.params;
-    if(!(/^\d+$/.test(codigo))) {
+    if (!(/^(\d+)|([\da-f]{24})$/.test(codigo))) {
       return res.status(400).json({error:'El codigo debe ser un dígito válido.'});
     }
     const {categoria, estado} = req.body;
@@ -84,7 +84,7 @@ router.put('/update/:codigo', async (req, res)=>{
       });
     }
 
-    const updateResult = await cat.updateCategory({codigo:parseInt(codigo), categoria, estado});
+    const updateResult = await cat.updateCategory({codigo, categoria, estado});
 
     if (!updateResult) {
       return res.status(404).json({error:'Categoria no encontrada.'});
@@ -101,11 +101,11 @@ router.put('/update/:codigo', async (req, res)=>{
 router.delete('/delete/:codigo', async (req, res) => {
   try {
     const { codigo } = req.params;
-    if (!(/^\d+$/.test(codigo))) {
+    if (!(/^(\d+)|([\da-f]{24})$/.test(codigo))) {
       return res.status(400).json({ error: 'El codigo debe ser un dígito válido.' });
     }
 
-    const deletedCategory = await cat.deleteCategory({ codigo: parseInt(codigo)});
+    const deletedCategory = await cat.deleteCategory({ codigo });
 
     if (!deletedCategory) {
       return res.status(404).json({ error: 'Categoria no encontrada.' });
