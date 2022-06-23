@@ -27,4 +27,14 @@ router.get('/page/:page/:limit', async (req, res) => {
   }
 });
 
+router.get('/summary', async (req, res) => {
+  try {
+    const summary = await cashFlow.getCashFlowGroupedByType();
+    return res.status(200).json(summary);
+  } catch (error) {
+    console.error('cashflow', error);
+    return res.status(500).json({ 'error': 'No se puede procesar petición.' });
+  }
+} );
+
 module.exports = router;

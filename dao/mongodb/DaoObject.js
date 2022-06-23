@@ -63,6 +63,8 @@ module.exports = class DaoObject {
   removeOne(_id){
     return this.collection.deleteOne({_id: new ObjectId(_id)});
   }
-  aggregate(){}
+  aggregate(stages){
+    return this.collection.aggregate(stages).toArray();
+  }
 
 }

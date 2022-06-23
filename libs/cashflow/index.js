@@ -53,6 +53,10 @@ module.exports = class Category {
     return this.cashFlowDao.getAllPaged({ page, pageLimit:limit});
   }
 
+  async getCashFlowGroupedByType() {
+    return this.cashFlowDao.getGroupByType();
+  }
+
   async getCashFlowById({ codigo }) {
     return this.cashFlowDao.getById({ codigo });
   }

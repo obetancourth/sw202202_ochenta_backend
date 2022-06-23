@@ -40,6 +40,22 @@ module.exports = class CashFlowDao extends DaoObject {
   getById({ codigo }) {
     return this.findById(codigo);
   }
+  getGroupByType() {
+    const groupBy = {
+      '$group': {
+        _id: '$type',
+        count: {'$sum': 1},
+        amount: {'$sum': '$amount'}
+      }
+    }
+    const sort = {
+      '$sort': {
+        _id : -1
+      }
+    }
+    return this.aggregate([groupBy, sort]);
+  }
+
   insertOne({ description, date, type, category, amount }) {
     const newCashFlow = {
       description,
