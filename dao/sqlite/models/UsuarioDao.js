@@ -1,8 +1,7 @@
 const { db } = require('../Connection');
 const DaoObject = require('../DaoObject');
-module.exports = class CategoryDao extends DaoObject {
+module.exports = class UsuariosDao extends DaoObject {
   constructor(db = null) {
-    console.log('CategoryDao db: ', db);
     super(db);
   }
   async setup() {

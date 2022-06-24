@@ -50,6 +50,13 @@ module.exports = class DaoObject {
     return this.collection.findOne(queryId);
   }
 
+  findOne(query = {}, projection = null ){
+    const options = {
+      projection
+    };
+    return this.collection.findOne(query, options);
+  }
+
   insertOne(docToInsert={}){
     if(docToInsert === {} ) {
       throw Error('A document to be inserted is needed.');

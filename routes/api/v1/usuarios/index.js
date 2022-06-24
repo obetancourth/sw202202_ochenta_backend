@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const Usuario = require('../../../../libs/usuarios');
-const UsuarioDao = require('../../../../dao/models/UsuarioDao');
-const userDao = new CategoryDao();
-const user = new Category(userDao);
+const UsuarioDao = require('../../../../dao/mongodb/models/UsuarioDao');
+const userDao = new UsuarioDao();
+const user = new Usuario(userDao);
 user.init();
 
 router.get('/', async (req, res) => {
