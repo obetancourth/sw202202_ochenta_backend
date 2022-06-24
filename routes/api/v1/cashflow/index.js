@@ -6,6 +6,7 @@ const cashFlow = new CashFlow(new CashFlowDao());
 cashFlow.init();
 router.get('/all', async (req, res) => {
   try {
+    console.log("CashFlow all: ", {user: req.user});
     const result = await cashFlow.getAllCashFlows();
     return res.status(200).json(result);
   } catch (error) {
