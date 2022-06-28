@@ -2,7 +2,7 @@ const { db } = require('../Connection');
 const DaoObject = require('../DaoObject');
 module.exports = class UsuariosDao extends DaoObject {
   constructor(db = null) {
-    super(db);
+    super(db, 'usuarios');
   }
   async setup() {
     if (process.env.MONGODB_SETUP) {
