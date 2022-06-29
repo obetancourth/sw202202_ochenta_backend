@@ -7,7 +7,7 @@ cashFlow.init();
 router.get('/all', async (req, res) => {
   try {
     console.log("CashFlow all: ", {user: req.user});
-    const result = await cashFlow.getAllCashFlows();
+    const result = await cashFlow.getAllCashFlows(req.user.jwtUser._id);
     return res.status(200).json(result);
   } catch (error) {
     console.error('cashflow', error);
@@ -20,7 +20,7 @@ router.get('/page/:page/:limit', async (req, res) => {
     const {page, limit} = req.params;
     const _page = parseInt(page);
     const _limit = parseInt(limit);
-    const result = await cashFlow.getPagedCashFlows(_page, _limit);
+    const result = await cashFlow.getPagedCashFlows(req.user.jwtUser._id, _page, _limit);
     return res.status(200).json(result);
   } catch (error) {
     console.error('cashflow', error);
@@ -30,7 +30,7 @@ router.get('/page/:page/:limit', async (req, res) => {
 
 router.get('/summary', async (req, res) => {
   try {
-    const summary = await cashFlow.getCashFlowGroupedByType();
+    const summary = await cashFlow.getCashFlowGroupedByType(req.user.jwtUser._id);
     return res.status(200).json(summary);
   } catch (error) {
     console.error('cashflow', error);

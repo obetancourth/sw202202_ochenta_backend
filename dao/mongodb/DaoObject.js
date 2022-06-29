@@ -32,6 +32,10 @@ module.exports = class DaoObject {
     }
   }
 
+  objectId( id ) {
+    return new ObjectId(id);
+  }
+
   find(query={}, projection=null, orderBy=null, limit=null, skip=null, returnCursor=false){
     const options = {
       projection,

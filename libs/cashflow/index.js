@@ -15,7 +15,7 @@ module.exports = class Category {
   async getVersion() {
     return {
       entity: 'CashFlow',
-      version: '1.0.0',
+      version: '1.0.1',
       description: 'CRUD de CashFlows'
     };
   }
@@ -25,7 +25,8 @@ module.exports = class Category {
     date = new Date().toISOString(),
     type = 'INCOME',
     category = 'salary',
-    amount = 0
+    amount = 0,
+    userId = ''
   }) {
     const result = await this.cashFlowDao.insertOne(
       {
@@ -33,7 +34,8 @@ module.exports = class Category {
         date,
         type,
         category,
-        amount
+        amount,
+        userId
       }
     );
     return {
@@ -46,15 +48,15 @@ module.exports = class Category {
     };
   };
 
-  async getAllCashFlows() {
-    return this.cashFlowDao.getAll();
+  async getAllCashFlows(userId) {
+    return this.cashFlowDao.getAll(userId);
   }
-  async getPagedCashFlows(page=1, limit=20) {
-    return this.cashFlowDao.getAllPaged({ page, pageLimit:limit});
+  async getPagedCashFlows(userId, page=1, limit=20) {
+    return this.cashFlowDao.getAllPaged({userId, page, pageLimit:limit});
   }
 
-  async getCashFlowGroupedByType() {
-    return this.cashFlowDao.getGroupByType();
+  async getCashFlowGroupedByType(userId) {
+    return this.cashFlowDao.getGroupByType({userId});
   }
 
   async getCashFlowById({ codigo }) {

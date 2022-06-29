@@ -1,4 +1,3 @@
-const { db } = require('../Connection');
 const DaoObject = require('../DaoObject');
 module.exports = class CashFlowDao extends DaoObject {
   constructor(db = null) {
@@ -11,13 +10,13 @@ module.exports = class CashFlowDao extends DaoObject {
     }
   }
 
-  getAll() {
-    return this.find();
+  getAll( userId ) {
+    return this.find({userId: this.objectId(userId)});
   }
 
-  async getAllPaged({page=1, pageLimit=25}) {
+  async getAllPaged({userId, page=1, pageLimit=25}) {
     const cashFlows = await this.find(
-      {},
+      {userId: this.objectId(userId)},
       null,
       null,
       null,
@@ -40,7 +39,13 @@ module.exports = class CashFlowDao extends DaoObject {
   getById({ codigo }) {
     return this.findById(codigo);
   }
-  getGroupByType() {
+
+  getGroupByType({userId}) {
+    const match = {
+      '$match' : {
+        userId : this.objectId(userId)
+      }
+    }
     const groupBy = {
       '$group': {
         _id: '$type',
@@ -53,17 +58,18 @@ module.exports = class CashFlowDao extends DaoObject {
         _id : -1
       }
     }
-    return this.aggregate([groupBy, sort]);
+    return this.aggregate([match, groupBy, sort]);
   }
 
-  insertOne({ description, date, type, category, amount }) {
+  insertOne({ description, date, type, category, amount, userId }) {
     const newCashFlow = {
       description,
       date,
       created: new Date().toISOString(),
       type,
       category,
-      amount
+      amount,
+      userId: this.objectId(userId)
     }
     return this.insertOne(newCashFlow);
   }
