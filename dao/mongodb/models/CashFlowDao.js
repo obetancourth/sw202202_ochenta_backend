@@ -6,7 +6,10 @@ module.exports = class CashFlowDao extends DaoObject {
   }
   async setup() {
     if (process.env.MONGODB_SETUP) {
-      // TODO: Agregar Indices
+      const indexExists = await this.collection.indexExists('userId_1');
+      if (!indexExists) {
+        await this.collection.createIndex({'userId': 1});
+      }
     }
   }
 

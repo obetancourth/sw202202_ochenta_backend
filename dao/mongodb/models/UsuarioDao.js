@@ -6,7 +6,10 @@ module.exports = class UsuariosDao extends DaoObject {
   }
   async setup() {
     if (process.env.MONGODB_SETUP) {
-     //agregar indice unico para el correo electronico
+     const indexExists = await this.collection.indexExists('email_1');
+     if (!indexExists) {
+      await this.collection.createIndex({email:1}, {unique:true});
+     }
     }
   }
 
