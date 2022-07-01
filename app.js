@@ -8,7 +8,7 @@ const corsWhiteList = (process.env.CORSLIST || '').split('|');
 const corsOptions = {
   origin: (origin, next)=>{
     console.log('CORS origin:', origin);
-    if (corsWhiteList.includes(origin)) {
+    if (corsWhiteList.includes(origin || "")) {
       next(null, true);
     } else {
       next(new Error('Not Allowed by Cors Policy'));
