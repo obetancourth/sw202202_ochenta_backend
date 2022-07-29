@@ -1,4 +1,4 @@
-const express =require('express');
+const express = require('express');
 let router = express.Router();
 const Usuario = require('../../../../libs/usuarios');
 const UsuarioDao = require('../../../../dao/mongodb/models/UsuarioDao');
@@ -6,22 +6,23 @@ const userDao = new UsuarioDao();
 const user = new Usuario(userDao);
 user.init();
 
-const {jwtSign} = require('../../../../libs/security');
+const { jwtSign } = require('../../../../libs/security');
 
-router.post('/login', async (req, res)=>{
+router.post('/login', async (req, res) => {
   try {
-    const {email, password} = req.body;
-    const userData = await user.getUsuarioByEmail({email});
-    if(! user.comparePasswords(password, userData.password) ) {
-      console.error('security login: ', {error:`Credenciales para usuario ${userData._id} ${userData.email} incorrectas.`});
+    const { email, password } = req.body;
+    const userData = await user.getUsuarioByEmail({ email });
+    console.log({ email, password });
+    if (!user.comparePasswords(password, userData.password)) {
+      console.error('security login: ', { error: `Credenciales para usuario ${userData._id} ${userData.email} incorrectas.` });
       return res.status(403).json({ "error": "Credenciales no Válidas" });
     }
-    const {password: passwordDb, created, updated, ...jwtUser} = userData;
-    const jwtToken = await jwtSign({jwtUser, generated: new Date().getTime()});
-    return res.status(200).json({token: jwtToken});
+    const { password: passwordDb, created, updated, ...jwtUser } = userData;
+    const jwtToken = await jwtSign({ jwtUser, generated: new Date().getTime() });
+    return res.status(200).json({ token: jwtToken });
   } catch (ex) {
-    console.error('security login: ', {ex});
-    return res.status(500).json({"error":"No es posible procesar la solicitud."});
+    console.error('security login: ', { ex });
+    return res.status(500).json({ "error": "No es posible procesar la solicitud." });
   }
 });
 
@@ -43,7 +44,7 @@ router.post('/signin', async (req, res) => {
     }
     const newUsuario = await user.addUsuarios({
       email,
-      nombre : 'John Doe',
+      nombre: 'John Doe',
       avatar: '',
       password,
       estado: 'ACT'

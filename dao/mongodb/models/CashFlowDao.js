@@ -8,18 +8,18 @@ module.exports = class CashFlowDao extends DaoObject {
     if (process.env.MONGODB_SETUP) {
       const indexExists = await this.collection.indexExists('userId_1');
       if (!indexExists) {
-        await this.collection.createIndex({'userId': 1});
+        await this.collection.createIndex({ 'userId': 1 });
       }
     }
   }
 
-  getAll( userId ) {
-    return this.find({userId: this.objectId(userId)});
+  getAll(userId) {
+    return this.find({ userId: this.objectId(userId) });
   }
 
-  async getAllPaged({userId, page=1, pageLimit=25}) {
+  async getAllPaged({ userId, page = 1, pageLimit = 25 }) {
     const cashFlows = await this.find(
-      {userId: this.objectId(userId)},
+      { userId: this.objectId(userId) },
       null,
       null,
       null,
@@ -27,14 +27,14 @@ module.exports = class CashFlowDao extends DaoObject {
       true
     );
     const totalDocs = await cashFlows.count();
-    cashFlows.skip(pageLimit * ( page - 1 ))
+    cashFlows.skip(pageLimit * (page - 1))
     cashFlows.limit(pageLimit);
     const cashFlowsDocs = await cashFlows.toArray();
     return {
       total: totalDocs,
       page,
       pageLimit,
-      totalPages: Math.ceil(totalDocs/pageLimit),
+      totalPages: Math.ceil(totalDocs / pageLimit),
       cashFlows: cashFlowsDocs
     }
   }
@@ -43,22 +43,22 @@ module.exports = class CashFlowDao extends DaoObject {
     return this.findById(codigo);
   }
 
-  getGroupByType({userId}) {
+  getGroupByType({ userId }) {
     const match = {
-      '$match' : {
-        userId : this.objectId(userId)
+      '$match': {
+        userId: this.objectId(userId)
       }
     }
     const groupBy = {
       '$group': {
         _id: '$type',
-        count: {'$sum': 1},
-        amount: {'$sum': '$amount'}
+        count: { '$sum': 1 },
+        amount: { '$sum': '$amount' }
       }
     }
     const sort = {
       '$sort': {
-        _id : -1
+        _id: -1
       }
     }
     return this.aggregate([match, groupBy, sort]);
@@ -74,7 +74,7 @@ module.exports = class CashFlowDao extends DaoObject {
       amount,
       userId: this.objectId(userId)
     }
-    return this.insertOne(newCashFlow);
+    return super.insertOne(newCashFlow);
   }
   updateOne({ ...rest }) {
     console.error('CashFlowDao error:', rest);

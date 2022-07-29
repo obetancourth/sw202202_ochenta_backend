@@ -51,12 +51,12 @@ module.exports = class Category {
   async getAllCashFlows(userId) {
     return this.cashFlowDao.getAll(userId);
   }
-  async getPagedCashFlows(userId, page=1, limit=20) {
-    return this.cashFlowDao.getAllPaged({userId, page, pageLimit:limit});
+  async getPagedCashFlows(userId, page = 1, limit = 20) {
+    return this.cashFlowDao.getAllPaged({ userId, page, pageLimit: limit });
   }
 
   async getCashFlowGroupedByType(userId) {
-    return this.cashFlowDao.getGroupByType({userId});
+    return this.cashFlowDao.getGroupByType({ userId });
   }
 
   async getCashFlowById({ codigo }) {
